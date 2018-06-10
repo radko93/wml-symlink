@@ -1,0 +1,13 @@
+{
+  "name": "wml-symlink",
+  "version": "0.0.2",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash.throttle": "^4.1.1",
+    "wml": "^0.0.83"
+  },
+  "bin": {
+    "wml-symlink": "./src/cli/index.js"
+  }
+}
