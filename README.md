@@ -9,3 +9,6 @@ The purpose of this package is to automatically detect symlink depedency, and ru
 
 ## Usage
 `yarn wml-symlink start`
+
+## Example 
+* [WML Symlink in react-native](https://github.com/Jekiwijaya/wml-symlink)
