@@ -1,6 +1,7 @@
 var wmlStart = require('wml/src/cli/start.js');
 
-exports.handler = () => {
-  require('../autoAddSymlink.js');
-	wmlStart.handler();
+exports.handler = async () => {
+  const wmlAdd = require('../autoAddSymlink.js');
+  await wmlAdd();
+  wmlStart.handler();
 };
