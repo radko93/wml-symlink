@@ -1,6 +1,6 @@
 const {
-	exec,
-	execSync
+  exec,
+  execSync
 } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -8,27 +8,28 @@ const throttle = require('lodash.throttle');
 
 // WML Setup
 function getSymlinkPackages() {
-	const packagePath = path.resolve(process.cwd(), 'package.json'),
-		packageJSON = require(packagePath),
-		depedencies = [].concat(
-			Object.keys(packageJSON.dependencies || {}),
-			Object.keys(packageJSON.devDependencies || {}),
-			Object.keys(packageJSON.peerDependencies || {})
-		).filter(depedency => depedency !== 'wml-symlink');
-	const modules = depedencies.map(depedency => `node_modules/${depedency}`);
+  const packagePath = path.resolve(process.cwd(), 'package.json'),
+    packageJSON = require(packagePath),
+    depedencies = [].concat(
+      Object.keys(packageJSON.dependencies || {}),
+      Object.keys(packageJSON.devDependencies || {}),
+      Object.keys(packageJSON.peerDependencies || {})
+    ).filter(depedency => depedency !== 'wml-symlink');
+  const modules = depedencies.map(depedency => `../../node_modules/${depedency}`);
   const isSymlink = file => fs.existsSync(file) && fs.lstatSync(file).isSymbolicLink();
-	return modules.filter(isSymlink);
+  return modules.filter(isSymlink);
 }
 
 const symlinkPackages = getSymlinkPackages();
 
 function addSymlinkPackages() {
   return symlinkPackages.reduce((promise, module) => {
-    console.log(`start ${module}`);
+    console.log(module.substr(4));
     return promise.then(() => {
       return new Promise((resolve, reject) => {
-        const travelokaAppsPath = path.resolve(process.cwd(), `${module}`);
+        const travelokaAppsPath = module.substr(4); // add to local node_modules folder, not to workspace node_modules
         const realPath = fs.realpathSync(module);
+        // console.log('', `start ${module}`);
         try {
           console.log(`[RUN] remove symlink ${module} | rm ${module}`);
           execSync(`rm -rf ${module}`);
@@ -51,7 +52,7 @@ function addSymlinkPackages() {
             const throttledAnswer = throttle(p => {
               try {
                 p.stdin.write('N\n');
-              } catch (e) {}
+              } catch (e) { }
             }, 1000);
             throttledAnswer(p);
             setTimeout(() => {
